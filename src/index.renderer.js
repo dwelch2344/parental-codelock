@@ -1,6 +1,7 @@
 'use strict'
 
 const moment = require('moment')
+const { app } = require('electron')
 const shutdown = require('electron-shutdown-command')
 
 const initialDelay = 2 * 60
@@ -15,11 +16,11 @@ const kill = () => {
   }
 }
 
-document.getElementById('testSleep').addEventListener('click', async () => {
-  window.alert('Here we go sleepy')
-  kill()
-  window.alert('made it here?')
-})
+// document.getElementById('testSleep').addEventListener('click', async () => {
+//   window.alert('Here we go sleepy')
+//   kill()
+//   window.alert('made it here?')
+// })
 
 const withPadding = duration => {
   if (duration.asDays() > 0) {
@@ -53,11 +54,15 @@ const submitCode = e => {
   const passcode = document.getElementById('passcode')
   const { value } = passcode
 
-  if (value && value.toLowerCase() === 'abc123') {
-    setLabel('Success')
-    setTimeleft(sessionLength)
-    if (!intervalId) {
-      intervalId = setInterval(tick, 1000)
+  if (value) {
+    if (value.toLowerCase() === 'abc123') {
+      setLabel('Success')
+      setTimeleft(sessionLength)
+      if (!intervalId) {
+        intervalId = setInterval(tick, 1000)
+      }
+    } else if (value.toLowerCase() === 'quit') {
+      app.quit()
     }
   } else {
     setLabel('Invalid password')
